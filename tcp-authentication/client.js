@@ -15,7 +15,12 @@ async function connectToIntermediary(client) {
   
   // this is the data the client recieves from the intermediary
   client.on("data", (data) => {
-    console.log("Recieved: ", JSON.parse(data));
+    try {
+      console.log("Recieved: ", data.toString());
+    }
+    catch (error) {
+      console.error("error interpreting data: ", error);
+    }
     client.end();
   });
   
@@ -27,7 +32,11 @@ async function connectToIntermediary(client) {
 async function connectToServer(client) {
   client.connect(serverPort, IP, () => {
     console.log("We have connected to the actual server");
-    client.write("we balling");
+    const object = {
+      "token": 69420,
+      "data": "we balling"
+    }
+    client.write(JSON.stringify(object));
   });
   
   client.on("data", (data) => {
@@ -40,4 +49,18 @@ async function connectToServer(client) {
   });
 }
 
-connectToIntermediary(client);
+// try to connect to the intermediary server
+try {
+  connectToIntermediary(client);
+}
+catch (error) {
+  console.error("error connecting to the server: ", error);
+}
+
+// // try to connect to the actual server
+// try {
+//   connectToServer(client);
+// }
+// catch (error) {
+//   console.error("error connecting to the server: ", error);
+// }

@@ -9,15 +9,16 @@ const intermediaryPort = 3000;
 const serverPort = 3001;
 
 const intermediary = createServer(async (client) => {
-  console.log("Client Connected");
 
   // create and set token into cache
   const token = uuidv4();
-  await redisClient.set(token, { "EX": "60", "NX" : true });
+  await redisClient.set(token, "authenticated", { "EX": "60", "NX" : true });
 
   // connect to the server
-  const serverSocket = createConnection(serverPort, IP, () => {
-    console.log("Connection to server");
+  const serverSocket = createConnection(serverPort, IP);
+  
+  serverSocket.on("error", () => {
+    client.end();
   });
 
   // when we recieve data from the client
@@ -31,7 +32,7 @@ const intermediary = createServer(async (client) => {
     serverSocket.write(JSON.stringify(authenticatedData));
   });
 
-  // when we recieve data bakc from the server
+  // when we recieve data back from the server
   serverSocket.on("data", (data) => {
     client.write(data);
   });

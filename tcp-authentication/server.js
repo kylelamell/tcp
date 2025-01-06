@@ -6,7 +6,7 @@ const IP = "127.0.0.1";
 const intermediaryPort = 3000;
 const serverPort = 3001;
 
-// helper function to determin if we were passed json
+// helper function
 function isJSON(data) {
   try {
     JSON.parse(data);
@@ -18,26 +18,30 @@ function isJSON(data) {
 }
 
 const server = createServer((client) => {
-  console.log("Client Connected");
-
-  client.on("data", (data) => {
-
-    try {
-      const object = JSON.parse(data.toString());
-      
-      // if there is no token the end
-      if (!object.token) {
-        client.end();
-      }
-    }
-    catch (error) {
-      console.log("error in validating data", error);
+  client.on("data", async (data) => {
+    
+    // check if the user gives invald json
+    if (!isJSON(data)) {
       client.end();
+      return;
     }
-  });
 
-  client.on("end", () => {
-    console.log("Client Disconnected from server");
+    // check if the user has no token
+    const object = JSON.parse(data.toString());
+    if (!object.token) {
+      client.end();
+      return;
+    }
+
+    // check if the user has an invalid token
+    const res = await redisClient.get(object.token.toString() || object.token);
+    if (!res) {
+      client.end();
+      return;
+    }
+
+    // return the correct data to the client
+    client.write(object.data.toUpperCase());
   });
 });
 
