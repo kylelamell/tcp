@@ -48,3 +48,10 @@ This project utilizes Node.js runtime enviornemnt with the
 following javascript libraries:
   - net
   - dotenv
+  - redis
+
+I also will utilize docker to set up a container for 
+running redis, whcih we will utilize for caching.
+  - CREATE: docker run -d --name redis-stack -p 6379:6379 -p 8001:8001 redis/redis-stack:latest
+  - START: docker start redis-stack
+  - STOP: docker stop redis-stack
