@@ -47,8 +47,8 @@ expects to recieve (for testing purposes).
 This project utilizes Node.js runtime enviornemnt with the 
 following javascript libraries:
   - net
-  - dotenv
   - redis
+  - uuid
 
 I also will utilize docker to set up a container for 
 running redis, whcih we will utilize for caching.
