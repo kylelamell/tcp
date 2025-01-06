@@ -13,8 +13,9 @@ async function connectToIntermediary(client) {
     client.write("we balling");
   });
   
+  // this is the data the client recieves from the intermediary
   client.on("data", (data) => {
-    console.log("Recieved: ", data.toString());
+    console.log("Recieved: ", JSON.parse(data));
     client.end();
   });
   
