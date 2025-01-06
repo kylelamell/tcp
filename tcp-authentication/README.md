@@ -39,3 +39,8 @@ the connection.
 The server will hopefully recieve an authenticaed message, 
 then we will send back some information that the client 
 expects to recieve (for testing purposes).
+
+# Dependencies
+This project utilizes Node.js runtime enviornemnt with the 
+following javascript libraries:
+  - net
