@@ -47,3 +47,4 @@ expects to recieve (for testing purposes).
 This project utilizes Node.js runtime enviornemnt with the 
 following javascript libraries:
   - net
+  - dotenv
